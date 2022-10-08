@@ -42,7 +42,15 @@ func (r *result) Success2(data interface{}) {
 	r.ctx.JSON(http.StatusOK, res)
 }
 
-func (r *result) Success3(message string, data interface{}) {
+func (r *result) Success3(message string) {
+	res := &ResultCont{
+		Code:    constants.OK.GetCode(),
+		Message: message,
+	}
+	r.ctx.JSON(http.StatusOK, res)
+}
+
+func (r *result) Success4(message string, data interface{}) {
 	if data == nil {
 		data = gin.H{}
 	}
