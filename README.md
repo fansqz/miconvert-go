@@ -20,9 +20,45 @@
 
 3. 需要安装的依赖
 
-   暂时只用libreoffice
+   暂时只用libreoffice,xpdf?
 
 
 
 ## 如何安装
 
+1. libreoffice
+
+   - 安装
+
+     ~~~shell
+     #查看yum是否支持libreoffice
+     yum search libreoffice
+     #安装
+     yum install -y libreoffice
+     ~~~
+
+   - 使用到的命令
+
+     ~~~shell
+     #window
+     
+     ~~~
+
+     
+
+2. pdf2doc安装
+
+   - 安装
+
+     ~~~shell
+     #这是一个python的库，可以使用命令行进行调用
+     pip install pdf2docx
+     ~~~
+
+   - 使用命令
+
+     ~~~shell
+     pdf2docx convert /path/to/pdf /path/to/docx
+     ~~~
+
+     

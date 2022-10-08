@@ -25,7 +25,7 @@ func NewConvertController() convertController {
 }
 
 func (c *convertController) GetSupportFormat(ctx *gin.Context) {
-
+	go
 }
 
 func (c *convertController) ConvertFiles(ctx *gin.Context) {
