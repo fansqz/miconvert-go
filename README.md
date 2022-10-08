@@ -51,14 +51,14 @@
    - 安装
 
      ~~~shell
-     #这是一个python的库，可以使用命令行进行调用
+     #这是一个python的库，但是使用命令行进行调用
      pip install pdf2docx
      ~~~
 
    - 使用命令
 
      ~~~shell
-     pdf2docx convert /path/to/pdf /path/to/docx
+     pdf2docx convert /path/to/pdf.pdf /path/to/docx.docx
      ~~~
 
      
