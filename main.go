@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"miconvert-go/db"
+	"miconvert-go/models"
 	"miconvert-go/routers"
 	"miconvert-go/setting"
 	"os"
@@ -26,9 +27,8 @@ func main() {
 	}
 	//程序退出时关闭mysql
 	defer db.CloseMysql()
-	//模型绑定
-	//todo:暂时不需要mysql？
-	db.DB.AutoMigrate()
+	//模型绑定,创建表
+	db.DB.AutoMigrate(&models.Format{})
 	//注册路由
 	routers.Run()
 }
