@@ -1,8 +1,8 @@
-// Package constant
+// Package constants
 // @Author: fzw
 // @Create: 2022/10/8
 // @Description: package about constants
-package constant
+package constants
 
 // ResultCode
 // @Description: response code and message return to the frontend
