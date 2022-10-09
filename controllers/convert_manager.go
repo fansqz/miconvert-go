@@ -29,7 +29,7 @@ type userFile struct {
 
 	UniqueName string //数据库唯一名称
 
-	UniqueConvertName string //转换以后数据库唯一名称
+	UniqueConvertedName string //转换以后数据库唯一名称
 
 	ConvertStat int //转换状态
 
@@ -57,7 +57,7 @@ func (c *convertManager) ReleaseSource(sessionId string) {
 	for _, userFile := range userFiles {
 		os.Remove(setting.Conf.TempInPath + "/" + userFile.UniqueName)
 		if userFile.ConvertStat == SUCCESS {
-			os.Remove(setting.Conf.TempOutPath + "/" + userFile.UniqueConvertName)
+			os.Remove(setting.Conf.TempOutPath + "/" + userFile.UniqueConvertedName)
 		}
 	}
 	c.Unlock()
@@ -99,7 +99,7 @@ func (c *convertManager) ConvertFile(sessionId string, file multipart.File, file
 		//通过路劲获取文件名
 		outfilePath = strings.ReplaceAll(outfilePath, "\\", "/")
 		a := strings.Split(outfilePath, "/")
-		userFile.UniqueConvertName = a[len(a)-1]
+		userFile.UniqueConvertedName = a[len(a)-1]
 		userFile.ConvertStat = SUCCESS
 	}()
 	//存储到存储到临时文件

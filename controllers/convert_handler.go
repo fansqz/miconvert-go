@@ -21,8 +21,8 @@ type ConvertController interface {
 	GetSupportOutFormat(ctx *gin.Context)
 	//添加文件进行解析,同步解析
 	ConvertFile(ctx *gin.Context)
-	//下载解析文件
-	DownloadFiles(ctx *gin.Context)
+	//下载解析文件，同步解析时使用
+	DownloadFile(ctx *gin.Context)
 }
 
 type convertController struct {
@@ -107,6 +107,12 @@ func (c *convertController) ConvertFile(ctx *gin.Context) {
 	}
 }
 
-func (c *convertController) DownloadFiles(ctx *gin.Context) {
-
+func (c *convertController) DownloadFile(ctx *gin.Context) {
+	uniqueNameConverted := ctx.PostForm("key")
+	ctx.Header("Content-Type", "application/octet-stream")
+	filename := string(uniqueNameConverted[strings.Index(uniqueNameConverted, "_")+1])
+	ctx.Header("Content-Disposition", "attachment; filename="+filename)
+	ctx.Header("Content-Transfer-Encoding", "binary")
+	ctx.File(setting.Conf.TempOutPath + "/" + uniqueNameConverted)
+	return
 }
