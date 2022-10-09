@@ -27,12 +27,7 @@ func NewResult(ctx *gin.Context) *result {
 //  @receiver r
 //  @param data
 //
-func (r *result) Success1() {
-	res := Success()
-	r.ctx.JSON(http.StatusOK, res)
-}
-
-func (r *result) Success2(data interface{}) {
+func (r *result) SuccessData(data interface{}) {
 	if data == nil {
 		data = gin.H{}
 	}
@@ -41,7 +36,7 @@ func (r *result) Success2(data interface{}) {
 	r.ctx.JSON(http.StatusOK, res)
 }
 
-func (r *result) Success3(message string) {
+func (r *result) SuccessMessage(message string) {
 	res := &ResultCont{
 		Code:    OK.GetCode(),
 		Message: message,
@@ -49,7 +44,7 @@ func (r *result) Success3(message string) {
 	r.ctx.JSON(http.StatusOK, res)
 }
 
-func (r *result) Success4(message string, data interface{}) {
+func (r *result) Success(message string, data interface{}) {
 	if data == nil {
 		data = gin.H{}
 	}
@@ -66,12 +61,7 @@ func (r *result) Success4(message string, data interface{}) {
 //  @Description: 返回错误的消息
 //  @receiver r
 //
-func (r *result) Error1() {
-	res := Error()
-	r.ctx.JSON(http.StatusOK, res)
-}
-
-func (r *result) Error2(code int, message string) {
+func (r *result) ErrorMessage(code int, message string) {
 	res := &ResultCont{
 		Code:    code,
 		Message: message,
@@ -79,11 +69,19 @@ func (r *result) Error2(code int, message string) {
 	r.ctx.JSON(http.StatusOK, res)
 }
 
-func (r *result) Error3(code int, message string, data interface{}) {
+func (r *result) Error(code int, message string, data interface{}) {
 	res := &ResultCont{
 		Code:    code,
 		Message: message,
 		Data:    data,
+	}
+	r.ctx.JSON(http.StatusOK, res)
+}
+
+func (r *result) simpleErrorMessage(message string) {
+	res := &ResultCont{
+		Code:    CUSTOM_SIMPLE_ERROR_MESSAGE.code,
+		Message: message,
 	}
 	r.ctx.JSON(http.StatusOK, res)
 }

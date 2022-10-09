@@ -49,7 +49,7 @@ func Success() *ResultCont {
 //
 func Error() *ResultCont {
 	return &ResultCont{
-		Code:    Err.GetCode(),
-		Message: Err.GetMessage(),
+		Code:    ERR.GetCode(),
+		Message: ERR.GetMessage(),
 	}
 }

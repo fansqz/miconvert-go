@@ -32,4 +32,9 @@ func Run() {
 		convert.GET("/getSupportFormat", convertController.GetSupportFormat)
 		convert.GET("/downloadFiles", convertController.DownloadFiles)
 	}
+
+	err := r.Run()
+	if err != nil {
+		return
+	}
 }

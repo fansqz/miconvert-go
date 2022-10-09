@@ -21,6 +21,7 @@ func (r ResultCode) GetMessage() string {
 }
 
 var (
-	Err = &ResultCode{code: 500, message: "server error"}
-	OK  = &ResultCode{code: 200, message: "response succeeded"}
+	CUSTOM_SIMPLE_ERROR_MESSAGE = &ResultCode{code: 1, message: "自定义错误"}
+	ERR                         = &ResultCode{code: 500, message: "server error"}
+	OK                          = &ResultCode{code: 200, message: "response succeeded"}
 )
