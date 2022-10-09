@@ -78,7 +78,7 @@ func (r *result) Error(code int, message string, data interface{}) {
 	r.ctx.JSON(http.StatusOK, res)
 }
 
-func (r *result) simpleErrorMessage(message string) {
+func (r *result) SimpleErrorMessage(message string) {
 	res := &ResultCont{
 		Code:    CUSTOM_SIMPLE_ERROR_MESSAGE.code,
 		Message: message,

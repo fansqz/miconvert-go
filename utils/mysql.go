@@ -22,12 +22,12 @@ var (
 //  @return error
 //
 func InitMysql(cfg *setting.MySqlConfig) error {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DB)
 	var err error
 	DB, err = gorm.Open("mysql", dsn)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	//尝试ping通
 	return DB.DB().Ping()
