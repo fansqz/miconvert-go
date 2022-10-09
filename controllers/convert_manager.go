@@ -12,6 +12,7 @@ import (
 	"sync"
 )
 
+//用于异步解析多个文件，todo
 var ConvertManager *convertManager
 
 const (
