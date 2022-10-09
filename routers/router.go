@@ -23,6 +23,7 @@ func Run() {
 	//设置静态文件位置
 	r.Static("/static", "/")
 
+	r.GET("/ping", controllers.Ping)
 	//文件转换相关
 	convert := r.Group("/convert")
 	{
