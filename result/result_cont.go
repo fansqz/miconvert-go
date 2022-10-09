@@ -1,7 +1,5 @@
 package result
 
-import "miconvert-go/constants"
-
 //
 // ResultCont
 // @Description: unified response format
@@ -19,7 +17,7 @@ type ResultCont struct {
 //  @return 是否success
 //
 func IsSuccessResult(r ResultCont) bool {
-	return r.Code == constants.OK.GetCode()
+	return r.Code == OK.GetCode()
 }
 
 //
@@ -39,7 +37,7 @@ func IsErrorResult(r ResultCont) bool {
 //
 func Success() *ResultCont {
 	return &ResultCont{
-		Code:    constants.OK.GetCode(),
+		Code:    OK.GetCode(),
 		Message: "",
 	}
 }
@@ -51,7 +49,7 @@ func Success() *ResultCont {
 //
 func Error() *ResultCont {
 	return &ResultCont{
-		Code:    constants.Error.GetCode(),
-		Message: constants.Error.GetMessage(),
+		Code:    Err.GetCode(),
+		Message: Err.GetMessage(),
 	}
 }

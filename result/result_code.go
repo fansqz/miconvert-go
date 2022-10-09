@@ -2,7 +2,7 @@
 // @Author: fzw
 // @Create: 2022/10/8
 // @Description: package about constants
-package constants
+package result
 
 // ResultCode
 // @Description: response code and message return to the frontend
@@ -21,6 +21,6 @@ func (r ResultCode) GetMessage() string {
 }
 
 var (
-	Error = &ResultCode{code: 500, message: "server error"}
-	OK    = &ResultCode{code: 200, message: "response succeeded"}
+	Err = &ResultCode{code: 500, message: "server error"}
+	OK  = &ResultCode{code: 200, message: "response succeeded"}
 )

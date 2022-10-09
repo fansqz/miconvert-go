@@ -2,7 +2,7 @@
 // @Author: fzw
 // @Create: 2022/10/8
 // @Description: 数据库开启关闭等
-package db
+package utils
 
 import (
 	"fmt"

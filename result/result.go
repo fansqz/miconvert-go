@@ -6,7 +6,6 @@ package result
 
 import (
 	"github.com/gin-gonic/gin"
-	"miconvert-go/constants"
 	"net/http"
 )
 
@@ -44,7 +43,7 @@ func (r *result) Success2(data interface{}) {
 
 func (r *result) Success3(message string) {
 	res := &ResultCont{
-		Code:    constants.OK.GetCode(),
+		Code:    OK.GetCode(),
 		Message: message,
 	}
 	r.ctx.JSON(http.StatusOK, res)
@@ -55,7 +54,7 @@ func (r *result) Success4(message string, data interface{}) {
 		data = gin.H{}
 	}
 	res := &ResultCont{
-		Code:    constants.OK.GetCode(),
+		Code:    OK.GetCode(),
 		Message: message,
 		Data:    data,
 	}

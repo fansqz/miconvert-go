@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"miconvert-go/db"
-	"miconvert-go/models"
 	"miconvert-go/routers"
 	"miconvert-go/setting"
+	"miconvert-go/utils"
 	"os"
 )
 
@@ -22,13 +21,11 @@ func main() {
 		return
 	}
 	//连接数据库
-	if err := db.InitMysql(setting.Conf.MySqlConfig); err != nil {
+	if err := utils.InitMysql(setting.Conf.MySqlConfig); err != nil {
 		fmt.Println("数据库连接失败")
 	}
 	//程序退出时关闭mysql
-	defer db.CloseMysql()
-	//模型绑定,创建表
-	db.DB.AutoMigrate(&models.Format{})
+	defer utils.CloseMysql()
 	//注册路由
 	routers.Run()
 }
