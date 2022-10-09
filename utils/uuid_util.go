@@ -15,3 +15,7 @@ func ConvertToUniqueName(filename string) string {
 	format := a[1]
 	return name + "." + format
 }
+
+func GetUUID() string {
+	return sid.Id()
+}
