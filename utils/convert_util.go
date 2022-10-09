@@ -12,6 +12,11 @@ import (
 	"strings"
 )
 
+const (
+	LIBRE_OFFICE = 1
+	PDF2DOCX     = 2
+)
+
 //
 // SOfficeConvert
 //  @Description: 利用libreoffice进行格式转换
