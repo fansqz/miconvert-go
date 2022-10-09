@@ -3,6 +3,7 @@ module miconvert-go
 go 1.18
 
 require (
+	github.com/chilts/sid v0.0.0-20190607042430-660e94789ec9
 	github.com/gin-gonic/gin v1.8.1
 	github.com/gomodule/redigo v1.8.9
 	github.com/gorilla/websocket v1.5.0
