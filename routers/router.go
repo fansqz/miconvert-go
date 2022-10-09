@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"miconvert-go/controllers"
 	"miconvert-go/setting"
+	"miconvert-go/ws"
 )
 
 //
@@ -22,14 +23,18 @@ func Run() {
 	r := gin.Default()
 	//设置静态文件位置
 	r.Static("/static", "/")
-
+	//ping
 	r.GET("/ping", controllers.Ping)
+	//ws
+	r.GET("/ws", func(ctx *gin.Context) {
+		ws.ServeWs(ctx.Writer, ctx.Request)
+	})
 	//文件转换相关
 	convert := r.Group("/convert")
 	{
 		convertController := controllers.NewConvertController()
 		convert.POST("/convertFiles", convertController.ConvertFiles)
-		convert.GET("/getSupportFormat", convertController.GetSupportFormat)
+		convert.GET("/getSupportFormat", convertController.GetSupportOutFormat)
 		convert.GET("/downloadFiles", convertController.DownloadFiles)
 	}
 

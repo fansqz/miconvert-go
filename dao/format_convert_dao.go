@@ -5,8 +5,8 @@
 package dao
 
 import (
+	"miconvert-go/db"
 	"miconvert-go/models"
-	"miconvert-go/utils"
 )
 
 //
@@ -16,7 +16,7 @@ import (
 //  @return error
 //
 func InsertFormatConvert(formatConvert *models.FormatConvert) error {
-	err := utils.DB.Create(&formatConvert).Error
+	err := db.DB.Create(&formatConvert).Error
 	return err
 }
 
@@ -29,7 +29,7 @@ func InsertFormatConvert(formatConvert *models.FormatConvert) error {
 //
 func ListAllInFormat() (inFormats []string, err error) {
 	inFormats = []string{}
-	if err = utils.DB.Select("in_format").Find(&inFormats).Error; err != nil {
+	if err = db.DB.Select("in_format").Find(&inFormats).Error; err != nil {
 		return nil, err
 	}
 	return
@@ -44,7 +44,7 @@ func ListAllInFormat() (inFormats []string, err error) {
 //
 func ListAllOutFormatByInFormat(inFormat string) (outFormats []string, err error) {
 	outFormats = []string{}
-	err = utils.DB.Select("out_format").Where("int_format = ?", inFormat).Find(&outFormats).Error
+	err = db.DB.Select("out_format").Where("int_format = ?", inFormat).Find(&outFormats).Error
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func ListAllOutFormatByInFormat(inFormat string) (outFormats []string, err error
 //
 func GetUtilByInFormatAndOutFormat(intFormat string, outFormat string) (utilCode int, err error) {
 	utilCode = -1
-	err = utils.DB.Select("convert_util").Where("in_format = ? and out_format = ?", intFormat, outFormat).Find(&utilCode).Error
+	err = db.DB.Select("convert_util").Where("in_format = ? and out_format = ?", intFormat, outFormat).Find(&utilCode).Error
 	if err != nil {
 		return -1, err
 	}

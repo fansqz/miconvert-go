@@ -13,9 +13,10 @@ var Conf = new(AppConfig)
 // @Description:应用配置
 //
 type AppConfig struct {
-	Release      bool `ini:"release"` //是否是上线模式
-	Port         int  `ini:"port"`    //端口
-	*MySqlConfig `ini:"mysql"`
+	Release        bool `ini:"release"` //是否是上线模式
+	Port           int  `ini:"port"`    //端口
+	*MySqlConfig   `ini:"mysql"`
+	*ConvertConfig `ini:"convert"`
 }
 
 //
@@ -28,6 +29,15 @@ type MySqlConfig struct {
 	DB       string `ini:"db"`       //要操作的数据库
 	Host     string `ini:"host"`     //host
 	Port     string `ini:"port"`     //端口
+}
+
+//
+// ConvertConfig
+// @Description: 文件转换相关配置文件
+//
+type ConvertConfig struct {
+	TempInPath  string `ini:"tempInPath"`  //输入文件临时存放位置
+	TempOutPath string `ini:"tempOutPath"` //输出文件临时存放位置
 }
 
 //
