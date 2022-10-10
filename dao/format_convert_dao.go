@@ -67,10 +67,12 @@ func ListAllOutFormatByInFormat(inFormat string) (outFormats []string, err error
 //  @return err
 //
 func GetUtilByInFormatAndOutFormat(intFormat string, outFormat string) (utilCode int, err error) {
-	utilCode = -1
-	err = db.DB.Select("convert_util").Where("in_format = ? and out_format = ?", intFormat, outFormat).Find(&utilCode).Error
+	formatConvert := &models.FormatConvert{}
+	err = db.DB.Select("convert_util").
+		Where("in_format = ? and out_format = ?", intFormat, outFormat).Find(&formatConvert).Error
 	if err != nil {
 		return -1, err
 	}
+	utilCode = formatConvert.ConvertUtil
 	return
 }

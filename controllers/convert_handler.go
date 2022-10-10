@@ -69,7 +69,7 @@ func (c *convertController) ConvertFile(ctx *gin.Context) {
 	//获取文件名称
 	file, headler, err := ctx.Request.FormFile("file")
 	defer file.Close()
-	outFormat := ctx.Param("outFormat")
+	outFormat := ctx.PostForm("outFormat")
 	//检验是否可以转换
 	a := strings.Split(headler.Filename, ".")
 	if len(a) != 2 {
