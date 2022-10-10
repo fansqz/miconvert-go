@@ -110,9 +110,9 @@ func (c *convertController) ConvertFile(ctx *gin.Context) {
 }
 
 func (c *convertController) DownloadFile(ctx *gin.Context) {
-	uniqueNameConverted := ctx.PostForm("key")
+	uniqueNameConverted := ctx.Query("key")
 	ctx.Header("Content-Type", "application/octet-stream")
-	filename := string(uniqueNameConverted[strings.Index(uniqueNameConverted, "_")+1])
+	filename := string(uniqueNameConverted[strings.Index(uniqueNameConverted, "_")+1:])
 	ctx.Header("Content-Disposition", "attachment; filename="+filename)
 	ctx.Header("Content-Transfer-Encoding", "binary")
 	ctx.File(setting.Conf.TempOutPath + "/" + uniqueNameConverted)
