@@ -10,6 +10,7 @@ import (
 	"miconvert-go/utils"
 	"os"
 	"strings"
+	"time"
 )
 
 //
@@ -53,6 +54,7 @@ func (c *convertController) GetSupportOutFormat(ctx *gin.Context) {
 func (c *convertController) ConvertFile(ctx *gin.Context) {
 	result := r.NewResult(ctx)
 	outfilePath := ""
+	infilePath := ""
 	//最后判断解析是否成功
 	defer func() {
 		if outfilePath == "" {
@@ -63,6 +65,9 @@ func (c *convertController) ConvertFile(ctx *gin.Context) {
 		}
 		//通过路劲获取文件名
 		outfilePath = strings.ReplaceAll(outfilePath, "\\", "/")
+		//延时10分钟删除资源
+		c.deleteSource(10*time.Minute, infilePath)
+		c.deleteSource(10*time.Minute, outfilePath)
 		a := strings.Split(outfilePath, "/")
 		result.SuccessData(a[len(a)-1])
 	}()
@@ -83,8 +88,9 @@ func (c *convertController) ConvertFile(ctx *gin.Context) {
 	}
 	//保存文件到temp
 	infilename := utils.GetUUID() + "_" + headler.Filename
+	infilePath = setting.Conf.TempInPath + "/" + infilename
 	os.Mkdir(setting.Conf.TempInPath, os.ModePerm)
-	f, err := os.Create(setting.Conf.TempInPath + "/" + infilename)
+	f, err := os.Create(infilePath)
 	if err != nil {
 		log.Println(err)
 		return
@@ -93,14 +99,14 @@ func (c *convertController) ConvertFile(ctx *gin.Context) {
 	io.Copy(f, file)
 	//进行转换
 	if utilCode == utils.LIBRE_OFFICE {
-		outfilePath, err = utils.SOfficeConvert(setting.Conf.TempInPath+"/"+infilename,
+		outfilePath, err = utils.SOfficeConvert(infilePath,
 			setting.Conf.TempOutPath, outFormat)
 		if err != nil {
 			log.Println(err)
 			return
 		}
 	} else if utilCode == utils.PDF2DOCX {
-		outfilePath, err = utils.Pdf2docxConvert(setting.Conf.TempInPath+"/"+infilename,
+		outfilePath, err = utils.Pdf2docxConvert(infilePath,
 			setting.Conf.TempInPath)
 		if err != nil {
 			log.Println(err)
@@ -117,4 +123,13 @@ func (c *convertController) DownloadFile(ctx *gin.Context) {
 	ctx.Header("Content-Transfer-Encoding", "binary")
 	ctx.File(setting.Conf.TempOutPath + "/" + uniqueNameConverted)
 	return
+}
+
+func (c *convertController) deleteSource(d time.Duration, path string) {
+	go func() {
+		t := time.NewTimer(d)
+		<-t.C
+		//删除资源
+		os.Remove(path)
+	}()
 }
