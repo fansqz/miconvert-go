@@ -34,16 +34,18 @@ func NewConvertController() *convertController {
 
 func (c *convertController) GetSupportOutFormat(ctx *gin.Context) {
 	result := r.NewResult(ctx)
-	inFileName := ctx.Param("fileNam")
+	inFileName := ctx.Query("fileName")
 	//检验文件名称是否合理
 	a := strings.Split(inFileName, ".")
 	if len(a) < 2 {
 		result.SimpleErrorMessage("不支持该文件格式")
+		return
 	}
 	//根据格式获取支持转换类型
-	outFormats, err := dao.ListAllOutFormatByInFormat(inFileName)
+	outFormats, err := dao.ListAllOutFormatByInFormat(a[1])
 	if err != nil || len(outFormats) == 0 {
 		result.SimpleErrorMessage("不支持该文件格式")
+		return
 	}
 	result.SuccessData(outFormats)
 }

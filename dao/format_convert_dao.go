@@ -43,10 +43,17 @@ func ListAllInFormat() (inFormats []string, err error) {
 //  @return err
 //
 func ListAllOutFormatByInFormat(inFormat string) (outFormats []string, err error) {
-	outFormats = []string{}
-	err = db.DB.Select("out_format").Where("int_format = ?", inFormat).Find(&outFormats).Error
+	formatConverts := []*models.FormatConvert{}
+	err = db.DB.Table("format_converts").
+		Select("out_format").Where("in_format = ?", inFormat).Scan(&formatConverts).Error
 	if err != nil {
 		return nil, err
+	}
+	if formatConverts != nil {
+		outFormats = make([]string, len(formatConverts))
+		for i := 0; i < len(formatConverts); i++ {
+			outFormats[i] = formatConverts[i].OutFormat
+		}
 	}
 	return
 }

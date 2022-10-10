@@ -33,9 +33,9 @@ func Run() {
 	convert := r.Group("/convert")
 	{
 		convertController := controllers.NewConvertController()
-		convert.POST("/convertFiles", convertController.ConvertFiles)
+		convert.POST("/convertFiles", convertController.ConvertFile)
 		convert.GET("/getSupportFormat", convertController.GetSupportOutFormat)
-		convert.GET("/downloadFiles", convertController.DownloadFiles)
+		convert.GET("/downloadFiles", convertController.DownloadFile)
 	}
 
 	err := r.Run()

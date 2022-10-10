@@ -19,7 +19,6 @@ func ServeWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	client := &Client{conn: conn, send: make(chan []byte, 256)}
-	CM.register <- client
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
