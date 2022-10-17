@@ -18,11 +18,11 @@ import (
 // @Description: 用于做各种文件转换的handler
 //
 type ConvertController interface {
-	//查询支持的类型转换
+	// GetSupportOutFormat 查询支持的类型转换
 	GetSupportOutFormat(ctx *gin.Context)
-	//添加文件进行解析,同步解析
+	// ConvertFile 添加文件进行解析,同步解析
 	ConvertFile(ctx *gin.Context)
-	//下载解析文件，同步解析时使用
+	// DownloadFile 下载解析文件，同步解析时使用
 	DownloadFile(ctx *gin.Context)
 }
 

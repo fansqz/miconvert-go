@@ -5,9 +5,9 @@ package result
 // @Description: unified response format
 //
 type ResultCont struct {
-	Code    int         //response code
-	Message string      //response message
-	Data    interface{} //response data
+	Code    int         `json:"code"`    //response code
+	Message string      `json:"message"` //response message
+	Data    interface{} `json:"data"`    //response data
 }
 
 //
