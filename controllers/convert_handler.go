@@ -59,9 +59,12 @@ func (c *convertController) ConvertFile(ctx *gin.Context) {
 	defer func() {
 		if outfilePath == "" {
 			result.SimpleErrorMessage("解析失败")
-		}
-		if _, err := os.Stat(outfilePath); err != nil {
+			c.deleteSource(1*time.Second, infilePath)
+			return
+		} else if _, err := os.Stat(outfilePath); err != nil {
 			result.SimpleErrorMessage("解析失败")
+			c.deleteSource(1*time.Second, infilePath)
+			return
 		}
 		//通过路劲获取文件名
 		outfilePath = strings.ReplaceAll(outfilePath, "\\", "/")
