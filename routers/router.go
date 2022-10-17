@@ -35,7 +35,7 @@ func Run() {
 		convertController := controllers.NewConvertController()
 		convert.POST("/convertFile", convertController.ConvertFile)
 		convert.GET("/getSupportFormat", convertController.GetSupportOutFormat)
-		convert.GET("/downloadFile", convertController.DownloadFile)
+		convert.GET("/downloadFile/:filename", convertController.DownloadFile)
 	}
 
 	err := r.Run()
