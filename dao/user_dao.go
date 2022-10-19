@@ -36,11 +36,11 @@ func CheckEmailInDb(email string) bool {
 
 }
 
-//SaveUser 向数据库中插入用户信息
-func SaveUser(username string, password string, email string) error {
+//InsertUser 向数据库中插入用户信息
+func InsertUser(user *models.User) error {
 	//写sql语句
 	sqlStr := "insert into users(username,password,email) values(?,?,?)"
 	//执行
-	db.DB.Exec(sqlStr, username, password, email)
+	db.DB.Exec(sqlStr, user.Username, user.Password, user.Email)
 	return nil
 }
