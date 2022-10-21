@@ -7,6 +7,7 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"miconvert-go/controllers"
+	"miconvert-go/interceptor"
 	"miconvert-go/setting"
 	"miconvert-go/ws"
 )
@@ -25,11 +26,7 @@ func Run() {
 	r.Static("/static", "/")
 	//ping
 	r.GET("/ping", controllers.Ping)
-	//ws
-	r.GET("/ws", func(ctx *gin.Context) {
-		ws.ServeWs(ctx.Writer, ctx.Request)
-	})
-	//文件转换相关
+	//游客解析
 	convert := r.Group("/convert")
 	{
 		convertController := controllers.NewConvertController()
@@ -37,7 +34,12 @@ func Run() {
 		convert.GET("/getSupportFormat", convertController.GetSupportOutFormat)
 		convert.GET("/downloadFile/:filename", convertController.DownloadFile)
 	}
-
+	//添加token拦截器
+	r.Use(interceptor.TokenAuthorize())
+	//ws
+	r.GET("/ws", func(ctx *gin.Context) {
+		ws.ServeWs(ctx.Writer, ctx.Request)
+	})
 	err := r.Run()
 	if err != nil {
 		return

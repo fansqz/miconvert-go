@@ -24,4 +24,6 @@ var (
 	CUSTOM_SIMPLE_ERROR_MESSAGE = &ResultCode{code: 1, message: "自定义错误"}
 	ERR                         = &ResultCode{code: 500, message: "server error"}
 	OK                          = &ResultCode{code: 200, message: "response succeeded"}
+	NOT_PERMISSION              = &ResultCode{code: 405, message: "当前用户无访问权限"}
+	IDENTITY_INVALID            = &ResultCode{code: 403, message: "当前用户状态失效"}
 )
