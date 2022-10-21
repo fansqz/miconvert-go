@@ -34,8 +34,16 @@ func Run() {
 		convert.GET("/getSupportFormat", convertController.GetSupportOutFormat)
 		convert.GET("/downloadFile/:filename", convertController.DownloadFile)
 	}
+	//用户注册,登录
+	userController := controllers.NewUserController()
+	r.POST("/user/register", userController.Register)
+	r.POST("/user/login", userController.Login)
+
 	//添加token拦截器
 	r.Use(interceptor.TokenAuthorize())
+
+	//修改密码
+	r.POST("/user/changePassword", userController.ChangePassword)
 	//ws
 	r.GET("/ws", func(ctx *gin.Context) {
 		ws.ServeWs(ctx.Writer, ctx.Request)
