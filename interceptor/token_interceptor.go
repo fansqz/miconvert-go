@@ -2,7 +2,7 @@ package interceptor
 
 import (
 	"github.com/gin-gonic/gin"
-	"miconvert-go/result"
+	result2 "miconvert-go/models/result"
 	"miconvert-go/utils"
 )
 
@@ -13,12 +13,12 @@ import (
 //
 func TokenAuthorize() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		r := result.NewResult(c)
+		r := result2.NewResult(c)
 		token := c.Request.Header.Get("token")
 		user, err := utils.ParseToken(token)
 		if err != nil || user == nil {
-			r.Error(result.IDENTITY_INVALID.GetCode(),
-				result.IDENTITY_INVALID.GetMessage(), nil)
+			r.Error(result2.IDENTITY_INVALID.GetCode(),
+				result2.IDENTITY_INVALID.GetMessage(), nil)
 		}
 	}
 }

@@ -5,7 +5,7 @@ import (
 	"io"
 	"log"
 	"miconvert-go/dao"
-	r "miconvert-go/result"
+	r "miconvert-go/models/result"
 	"miconvert-go/setting"
 	"miconvert-go/utils"
 	"os"
