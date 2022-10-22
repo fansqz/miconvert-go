@@ -11,9 +11,24 @@ import (
 //  @param userId
 //  @return []*models.UserFile
 //
-func ListFileNamesByUserId(userId int) []*models.UserFile {
+func ListFileNamesByUserId(userID int) []*models.UserFile {
 	var userFiles []*models.UserFile
-	db.DB.Select("id", "in_file_name", "out_file_name").Where("user_id = ?", userId).Scan(userFiles)
+	db.DB.Select("id", "in_file_name", "out_file_name").Where("user_id = ?", userID).Scan(&userFiles)
+	if userFiles == nil {
+		userFiles = []*models.UserFile{}
+	}
+	return userFiles
+}
+
+//
+// ListUserFileByUserId
+//  @Description: 通过用户名称获取所有的userFile，包含所有属性
+//  @param userId
+//  @return []*models.UserFile
+//
+func ListUserFileByUserId(userID int) []*models.UserFile {
+	var userFiles []*models.UserFile
+	db.DB.Where("user_id = ?", userID).Scan(&userFiles)
 	if userFiles == nil {
 		userFiles = []*models.UserFile{}
 	}
