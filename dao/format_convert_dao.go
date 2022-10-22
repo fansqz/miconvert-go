@@ -44,7 +44,7 @@ func ListAllInFormat() (inFormats []string, err error) {
 //
 func ListAllOutFormatByInFormat(inFormat string) (outFormats []string, err error) {
 	formatConverts := []*models.FormatConvert{}
-	err = db.DB.Table("format_converts").
+	err = db.DB.Model(&models.FormatConvert{}).
 		Select("out_format").Where("in_format = ?", inFormat).Scan(&formatConverts).Error
 	if err != nil {
 		return nil, err
@@ -68,8 +68,7 @@ func ListAllOutFormatByInFormat(inFormat string) (outFormats []string, err error
 //
 func GetUtilByInFormatAndOutFormat(intFormat string, outFormat string) (utilCode int, err error) {
 	formatConvert := &models.FormatConvert{}
-	err = db.DB.Select("convert_util").
-		Where("in_format = ? and out_format = ?", intFormat, outFormat).Find(&formatConvert).Error
+	err = db.DB.Where("in_format = ? and out_format = ?", intFormat, outFormat).Find(&formatConvert).Error
 	if err != nil {
 		return -1, err
 	}
