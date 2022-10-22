@@ -36,6 +36,17 @@ func ListUserFileByUserId(userID int) []*models.UserFile {
 }
 
 //
+// ListUserFileByIds
+//  @Description: 获取多个文件信息
+//  @param ids
+//
+func ListUserFileByIds(ids []int) []*models.UserFile {
+	var userFiles []*models.UserFile
+	db.DB.Find(&userFiles, ids)
+	return userFiles
+}
+
+//
 // InsertUserFile
 //  @Description: 添加一个用户文件
 //  @param userFile
