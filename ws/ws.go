@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-var wsMap = make(map[int]*websocket.Conn)
-
 //
 // ServeWs
 //  @Description: http升级到ws，并添加client
@@ -28,7 +26,7 @@ func ServeWs(w http.ResponseWriter, r *http.Request) {
 	array := strings.Split(r.URL.String(), ",")
 	token := array[len(array)-1]
 	user, _ := utils.ParseToken(token)
-	wsMap[user.ID] = conn
+	WSManager.wsMap[user.ID] = conn
 
 	go listenClose(user.ID, conn)
 }
@@ -37,8 +35,7 @@ func listenClose(userid int, ws *websocket.Conn) {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
-		ws.Close()
-		delete(wsMap, userid)
+		WSManager.deleteConn(userid)
 	}()
 	for {
 		select {

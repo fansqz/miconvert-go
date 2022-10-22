@@ -45,7 +45,7 @@ func Run() {
 	//修改密码
 	r.POST("/user/changePassword", userController.ChangePassword)
 	//ws
-	r.GET("/ws", func(ctx *gin.Context) {
+	r.GET("/ws/:token", func(ctx *gin.Context) {
 		ws.ServeWs(ctx.Writer, ctx.Request)
 	})
 	err := r.Run()
