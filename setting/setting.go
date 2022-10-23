@@ -38,6 +38,8 @@ type MySqlConfig struct {
 type ConvertConfig struct {
 	TempInPath  string `ini:"tempInPath"`  //输入文件临时存放位置
 	TempOutPath string `ini:"tempOutPath"` //输出文件临时存放位置
+	UserInPath  string `ini:"userInPath"`  //用户输入文件位置
+	UserOutPath string `ini:"userOutPath"` //用户输出文件位置
 }
 
 //
