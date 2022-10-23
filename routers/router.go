@@ -53,7 +53,7 @@ func Run() {
 	{
 		userConvertController := controllers.NewUserConvertController()
 		userConvert.GET("listFile", userConvertController.ListFile)
-		userConvert.DELETE("delete", userConvertController.DeleteFiles)
+		userConvert.DELETE("deleteFiles", userConvertController.DeleteFiles)
 		userConvert.POST("convertFile", userConvertController.ConvertFile)
 		userConvert.GET("downloadFile", userConvertController.DownloadFile)
 	}
