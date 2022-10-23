@@ -72,6 +72,9 @@ func GetUtilByInFormatAndOutFormat(intFormat string, outFormat string) (utilCode
 	if err != nil {
 		return -1, err
 	}
+	if formatConvert == nil {
+		return -1, nil
+	}
 	utilCode = formatConvert.ConvertUtil
 	return
 }

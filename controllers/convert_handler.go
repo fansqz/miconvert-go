@@ -78,17 +78,6 @@ func (c *convertController) ConvertFile(ctx *gin.Context) {
 	file, headler, err := ctx.Request.FormFile("file")
 	defer file.Close()
 	outFormat := ctx.PostForm("outFormat")
-	//检验是否可以转换
-	a := strings.Split(headler.Filename, ".")
-	if len(a) != 2 {
-		result.SimpleErrorMessage("不支持该文件格式")
-	}
-	inFormat := a[1]
-	utilCode, err := dao.GetUtilByInFormatAndOutFormat(inFormat, outFormat)
-	if err != nil {
-		log.Println(err)
-		result.SimpleErrorMessage("不支持该文件格式")
-	}
 	//保存文件到temp
 	infilename := utils.GetUUID() + "_" + headler.Filename
 	infilePath = setting.Conf.TempInPath + "/" + infilename
@@ -101,21 +90,7 @@ func (c *convertController) ConvertFile(ctx *gin.Context) {
 	defer f.Close()
 	io.Copy(f, file)
 	//进行转换
-	if utilCode == utils.LIBRE_OFFICE {
-		outfilePath, err = utils.SOfficeConvert(infilePath,
-			setting.Conf.TempOutPath, outFormat)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-	} else if utilCode == utils.PDF2DOCX {
-		outfilePath, err = utils.Pdf2docxConvert(infilePath,
-			setting.Conf.TempInPath)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-	}
+	outfilePath, _ = utils.Convert(infilePath, setting.Conf.TempOutPath, outFormat)
 }
 
 func (c *convertController) DownloadFile(ctx *gin.Context) {
