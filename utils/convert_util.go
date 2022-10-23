@@ -5,7 +5,9 @@
 package utils
 
 import (
+	"fmt"
 	"log"
+	"miconvert-go/dao"
 	"os/exec"
 	"path"
 	"runtime"
@@ -72,4 +74,45 @@ func Pdf2docxConvert(fileSrcPath string, fileOutDir string) (fileOutPath string,
 	//返回数据
 	log.Println("文件转换成功", string(byteByState))
 	return fileOutPath, nil
+}
+
+//
+// Convert
+//  @Description: 统一的转换工具，获取数据库中数据读取转换工具
+//  @param fileSrcPath
+//  @param fileOutDir
+//  @return fileOutPath
+//  @return err
+//
+func Convert(fileSrcPath string, fileOutDir string, outFormat string) (string, error) {
+	a := strings.Split(fileSrcPath, ".")
+	inFormat := a[len(a)-1]
+	//读取工具
+	utilCode, err := dao.GetUtilByInFormatAndOutFormat(inFormat, outFormat)
+	if err != nil {
+		log.Println(err)
+		return "", err
+	}
+	if utilCode == -1 {
+		return "", fmt.Errorf("不支持该文件格式")
+	}
+	//进行转换
+	var cerr error
+	var outFilePath string
+	if utilCode == LIBRE_OFFICE {
+		outFilePath, cerr = SOfficeConvert(fileSrcPath,
+			fileOutDir, outFormat)
+		if cerr != nil {
+			log.Println(cerr)
+			return "", cerr
+		}
+	} else if utilCode == PDF2DOCX {
+		outFilePath, err = Pdf2docxConvert(fileSrcPath,
+			fileOutDir)
+		if err != nil {
+			log.Println(err)
+			return "", cerr
+		}
+	}
+	return outFilePath, nil
 }
