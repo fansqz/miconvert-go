@@ -117,3 +117,20 @@ func (c *userConvertController) ConvertFile(ctx *gin.Context) {
 	}()
 	result.SuccessData("文件已添加")
 }
+
+func (c *userConvertController) DownloadFile(ctx *gin.Context) {
+	result := r.NewResult(ctx)
+	fileIdString := ctx.Param("fileId")
+	fileId, err := strconv.Atoi(fileIdString)
+	if err != nil {
+		result.SimpleErrorMessage("输入数据有误")
+		return
+	}
+	//读取输出文件位置
+	userFile := dao.GetUserFileById(fileId)
+	ctx.Header("Content-Type", "application/octet-stream")
+	ctx.Header("Content-Disposition", "attachment; filename="+userFile.OutFileName)
+	ctx.Header("Content-Transfer-Encoding", "binary")
+	ctx.File(userFile.OutFilePath)
+	return
+}

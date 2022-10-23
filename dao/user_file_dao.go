@@ -35,6 +35,12 @@ func ListUserFileByUserId(userID int) []*models.UserFile {
 	return userFiles
 }
 
+func GetUserFileById(fileId int) *models.UserFile {
+	var userFile *models.UserFile
+	db.DB.First(userFile, fileId)
+	return userFile
+}
+
 //
 // ListUserFileByIds
 //  @Description: 获取多个文件信息
