@@ -48,6 +48,15 @@ func Run() {
 	r.GET("/ws/:token", func(ctx *gin.Context) {
 		ws.ServeWs(ctx.Writer, ctx.Request)
 	})
+	//用户文件解析
+	userConvert := r.Group("userConvert")
+	{
+		userConvertController := controllers.NewUserConvertController()
+		userConvert.GET("listFile", userConvertController.ListFile)
+		userConvert.DELETE("delete", userConvertController.DeleteFiles)
+		userConvert.POST("convertFile", userConvertController.ConvertFile)
+		userConvert.GET("downloadFile", userConvertController.DownloadFile)
+	}
 	err := r.Run()
 	if err != nil {
 		return
