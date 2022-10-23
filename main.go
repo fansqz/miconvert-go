@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"miconvert-go/db"
+	"miconvert-go/models"
 	"miconvert-go/routers"
 	"miconvert-go/setting"
 	"os"
@@ -23,6 +24,11 @@ func main() {
 	if err := db.InitMysql(setting.Conf.MySqlConfig); err != nil {
 		fmt.Println("数据库连接失败")
 	}
+
+	// 模型绑定
+	db.DB.Model(&models.FormatConvert{})
+	db.DB.Model(&models.User{})
+	db.DB.Model(&models.UserFile{})
 	//程序退出时关闭mysql
 	defer db.CloseMysql()
 	//注册路由
