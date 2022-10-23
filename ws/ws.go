@@ -35,7 +35,7 @@ func listenClose(userid int, ws *websocket.Conn) {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
-		WSManager.deleteConn(userid)
+		WSManager.DeleteConn(userid)
 	}()
 	for {
 		select {

@@ -22,6 +22,8 @@ func Run() {
 	}
 
 	r := gin.Default()
+	//允许跨域
+	r.Use(interceptor.Cors())
 	//设置静态文件位置
 	r.Static("/static", "/")
 	//ping
