@@ -57,12 +57,7 @@ func (u *userController) Register(ctx *gin.Context) {
 	user.Email = email
 	user.Username = username
 	//插入
-	insertErr := dao.InsertUser(user)
-	if insertErr != nil {
-		log.Println(err)
-		result.SimpleErrorMessage("注册失败")
-		return
-	}
+	dao.InsertUser(user)
 	//注册成功返回数据
 	result.SuccessMessage("注册成功")
 }
@@ -83,6 +78,7 @@ func (u *userController) Login(ctx *gin.Context) {
 	user, userErr := dao.GetUserByName(username)
 	if userErr != nil {
 		result.SimpleErrorMessage("系统错误")
+
 		return
 	}
 	if user == nil || !utils.ComparePwd(user.Password, password) {

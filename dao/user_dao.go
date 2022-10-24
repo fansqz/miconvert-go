@@ -18,12 +18,11 @@ func GetUserByName(username string) (*models.User, error) {
 
 // CheckUserNameInDb 检测用户名是否存在
 func CheckUserNameInDb(username string) bool {
-	sqlStr := "select name from users where username = ?"
 	//执行
-	row := db.DB.Raw(sqlStr, username)
-	var username2 string
-	row.Scan(&username2)
-	return username2 != ""
+	row := db.DB.Model(&models.User{}).Select("username").Where("username = ?", username)
+	user := &models.User{}
+	row.Scan(&user)
+	return user.Username != ""
 }
 
 // CheckEmailInDb 检测邮箱是否存在
@@ -37,12 +36,8 @@ func CheckEmailInDb(email string) bool {
 }
 
 //InsertUser 向数据库中插入用户信息
-func InsertUser(user *models.User) error {
-	//写sql语句
-	sqlStr := "insert into users(username,password,email) values(?,?,?)"
-	//执行
-	db.DB.Exec(sqlStr, user.Username, user.Password, user.Email)
-	return nil
+func InsertUser(user *models.User) {
+	db.DB.Create(user)
 }
 
 //UpdateUser 更新用户
