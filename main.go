@@ -26,9 +26,9 @@ func main() {
 	}
 
 	// 模型绑定
-	db.DB.Model(&models.FormatConvert{})
-	db.DB.Model(&models.User{})
-	db.DB.Model(&models.UserFile{})
+	db.DB.AutoMigrate(&models.FormatConvert{})
+	db.DB.AutoMigrate(&models.User{})
+	db.DB.AutoMigrate(&models.UserFile{})
 	//程序退出时关闭mysql
 	defer db.CloseMysql()
 	//注册路由
