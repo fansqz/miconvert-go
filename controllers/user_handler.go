@@ -78,7 +78,7 @@ func (u *userController) Login(ctx *gin.Context) {
 	user, userErr := dao.GetUserByName(username)
 	if userErr != nil {
 		result.SimpleErrorMessage("系统错误")
-
+		log.Println(userErr)
 		return
 	}
 	if user == nil || !utils.ComparePwd(user.Password, password) {
@@ -87,6 +87,7 @@ func (u *userController) Login(ctx *gin.Context) {
 	}
 	token, err := utils.GenerateToken(user)
 	if err != nil {
+		log.Println(err)
 		result.SimpleErrorMessage("系统错误")
 		return
 	}
@@ -110,6 +111,7 @@ func (u *userController) ChangePassword(ctx *gin.Context) {
 	//检验用户名
 	user, err := dao.GetUserByName(username)
 	if err != nil {
+		log.Println(err)
 		result.SimpleErrorMessage("系统错误")
 		return
 	}
@@ -125,6 +127,7 @@ func (u *userController) ChangePassword(ctx *gin.Context) {
 	password, getPwdErr := utils.GetPwd(newPassword)
 	if getPwdErr != nil {
 		result.SimpleErrorMessage("系统错误")
+		log.Println(getPwdErr)
 		return
 	}
 	user.Password = string(password)

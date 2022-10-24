@@ -44,7 +44,7 @@ func GenerateToken(user *models.User) (string, error) {
 		},
 	}
 	//设置加密算法，生成token对象
-	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	//通过私钥获取已签名token
 	token, err := tokenClaims.SignedString([]byte(key))
 	return token, err
