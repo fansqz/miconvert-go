@@ -24,6 +24,10 @@ type ConvertController interface {
 	ConvertFile(ctx *gin.Context)
 	// DownloadFile 下载解析文件，同步解析时使用
 	DownloadFile(ctx *gin.Context)
+	// ListAllOutFormat 获取所有可转换的格式
+	ListAllOutFormat(ctx *gin.Context)
+	// ListAllInFormatByOutFormat 根据输出格式，获取所有支持的输入格式
+	ListAllInFormatByOutFormat(ctx *gin.Context)
 }
 
 type convertController struct {
@@ -43,7 +47,7 @@ func (c *convertController) GetSupportOutFormat(ctx *gin.Context) {
 		return
 	}
 	//根据格式获取支持转换类型
-	outFormats, err := dao.ListAllOutFormatByInFormat(a[1])
+	outFormats, err := dao.ListOutFormatByInFormat(a[1])
 	if err != nil || len(outFormats) == 0 {
 		result.SimpleErrorMessage("不支持该文件格式")
 		return
@@ -110,4 +114,26 @@ func (c *convertController) deleteSource(d time.Duration, path string) {
 		//删除资源
 		os.Remove(path)
 	}()
+}
+
+func (c *convertController) ListAllOutFormat(ctx *gin.Context) {
+	result := r.NewResult(ctx)
+	outFormats, err := dao.ListAllOutFormat()
+	if err != nil || len(outFormats) == 0 {
+		result.SimpleErrorMessage("系统错误")
+		return
+	}
+	result.SuccessData(outFormats)
+}
+
+func (c *convertController) ListAllInFormatByOutFormat(ctx *gin.Context) {
+	result := r.NewResult(ctx)
+	outFormat := ctx.Query("outFormat")
+	//根据格式获取支持转换类型
+	inFormats, err := dao.ListInFormatByOufFormat(outFormat)
+	if err != nil || len(inFormats) == 0 {
+		result.SimpleErrorMessage("不支持该文件格式")
+		return
+	}
+	result.SuccessData(inFormats)
 }

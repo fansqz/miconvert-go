@@ -35,6 +35,8 @@ func Run() {
 		convert.POST("/convertFile", convertController.ConvertFile)
 		convert.GET("/getSupportFormat", convertController.GetSupportOutFormat)
 		convert.GET("/downloadFile/:filename", convertController.DownloadFile)
+		convert.GET("/listAllOutFormat", convertController.ListAllOutFormat)
+		convert.GET("/listAllInFormatByOutFormat", convertController.ListAllInFormatByOutFormat)
 	}
 	//用户注册,登录
 	userController := controllers.NewUserController()

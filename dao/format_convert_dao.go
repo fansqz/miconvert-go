@@ -36,13 +36,13 @@ func ListAllInFormat() (inFormats []string, err error) {
 }
 
 //
-// ListAllOutFormatByInFormat
+// ListOutFormatByInFormat
 //  @Description: 查询某个格式可以转换为其他格式
 //  @param format
 //  @return convertFormats
 //  @return err
 //
-func ListAllOutFormatByInFormat(inFormat string) (outFormats []string, err error) {
+func ListOutFormatByInFormat(inFormat string) (outFormats []string, err error) {
 	formatConverts := []*models.FormatConvert{}
 	err = db.DB.Model(&models.FormatConvert{}).
 		Select("out_format").Where("in_format = ?", inFormat).Scan(&formatConverts).Error
@@ -53,6 +53,51 @@ func ListAllOutFormatByInFormat(inFormat string) (outFormats []string, err error
 		outFormats = make([]string, len(formatConverts))
 		for i := 0; i < len(formatConverts); i++ {
 			outFormats[i] = formatConverts[i].OutFormat
+		}
+	}
+	return
+}
+
+//
+// ListAllOutFormat
+//  @Description: 获取想要转换的格式
+//  @param format
+//  @return convertFormats
+//  @return err
+//
+func ListAllOutFormat() (outFormats []string, err error) {
+	formatConverts := []*models.FormatConvert{}
+	err = db.DB.Model(&models.FormatConvert{}).
+		Select("out_format").Scan(&formatConverts).Error
+	if err != nil {
+		return nil, err
+	}
+	if formatConverts != nil {
+		outFormats = make([]string, len(formatConverts))
+		for i := 0; i < len(formatConverts); i++ {
+			outFormats[i] = formatConverts[i].OutFormat
+		}
+	}
+	return
+}
+
+//
+// ListInFormatByOufFormat
+//  @Description: 根据输出格式，获取可转换的输入格式
+//  @return inFormats
+//  @return err
+//
+func ListInFormatByOufFormat(outFormat string) (inFormats []string, err error) {
+	formatConverts := []*models.FormatConvert{}
+	err = db.DB.Model(&models.FormatConvert{}).
+		Select("in_format").Where("in_format = ?", outFormat).Scan(&formatConverts).Error
+	if err != nil {
+		return nil, err
+	}
+	if formatConverts != nil {
+		inFormats = make([]string, len(formatConverts))
+		for i := 0; i < len(formatConverts); i++ {
+			inFormats[i] = formatConverts[i].InFormat
 		}
 	}
 	return
