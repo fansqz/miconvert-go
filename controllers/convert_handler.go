@@ -27,7 +27,7 @@ type ConvertController interface {
 	// ListAllOutFormat 获取所有可转换的格式
 	ListAllOutFormat(ctx *gin.Context)
 	// ListAllInFormatByOutFormat 根据输出格式，获取所有支持的输入格式
-	ListAllInFormatByOutFormat(ctx *gin.Context)
+	ListInFormatByOutFormat(ctx *gin.Context)
 }
 
 type convertController struct {
@@ -126,7 +126,7 @@ func (c *convertController) ListAllOutFormat(ctx *gin.Context) {
 	result.SuccessData(outFormats)
 }
 
-func (c *convertController) ListAllInFormatByOutFormat(ctx *gin.Context) {
+func (c *convertController) ListInFormatByOutFormat(ctx *gin.Context) {
 	result := r.NewResult(ctx)
 	outFormat := ctx.Query("outFormat")
 	//根据格式获取支持转换类型
