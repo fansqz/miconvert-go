@@ -91,7 +91,7 @@ func ListAllOutFormat() (outFormats []string, err error) {
 func ListInFormatByOufFormat(outFormat string) (inFormats []string, err error) {
 	formatConverts := []*models.FormatConvert{}
 	err = db.DB.Model(&models.FormatConvert{}).
-		Select("in_format").Where("in_format = ?", outFormat).Scan(&formatConverts).Error
+		Select("DISTINCT(in_format)").Where("out_format = ?", outFormat).Scan(&formatConverts).Error
 	if err != nil {
 		return nil, err
 	}
