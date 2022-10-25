@@ -29,7 +29,7 @@ func InsertFormatConvert(formatConvert *models.FormatConvert) error {
 //
 func ListAllInFormat() (inFormats []string, err error) {
 	inFormats = []string{}
-	if err = db.DB.Select("in_format").Find(&inFormats).Error; err != nil {
+	if err = db.DB.Select("DISTINCT(in_format)").Find(&inFormats).Error; err != nil {
 		return nil, err
 	}
 	return
@@ -68,10 +68,11 @@ func ListOutFormatByInFormat(inFormat string) (outFormats []string, err error) {
 func ListAllOutFormat() (outFormats []string, err error) {
 	formatConverts := []*models.FormatConvert{}
 	err = db.DB.Model(&models.FormatConvert{}).
-		Select("out_format").Scan(&formatConverts).Error
+		Select("DISTINCT(out_format)").Scan(&formatConverts).Error
 	if err != nil {
 		return nil, err
 	}
+	// 用于去重
 	if formatConverts != nil {
 		outFormats = make([]string, len(formatConverts))
 		for i := 0; i < len(formatConverts); i++ {
