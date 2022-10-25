@@ -20,5 +20,6 @@ func TokenAuthorize() gin.HandlerFunc {
 			r.Error(result2.IDENTITY_INVALID.GetCode(),
 				result2.IDENTITY_INVALID.GetMessage(), nil)
 		}
+		c.Keys["user"] = user
 	}
 }
