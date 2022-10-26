@@ -58,7 +58,7 @@ func GenerateToken(user *models.User) (string, error) {
 //
 func ParseToken(token string) (*models.User, error) {
 	//获取到token对象
-	tokenClaims, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+	tokenClaims, err := jwt.ParseWithClaims(token, &claims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})
 	//通过断言获取到claim
