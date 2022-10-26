@@ -43,7 +43,7 @@ func (c *userConvertController) ListFile(ctx *gin.Context) {
 		result.SimpleErrorMessage("系统错误")
 		return
 	}
-	userFiles := dao.ListFileNamesByUserId(user.ID)
+	userFiles := dao.ListFileStatesByUserId(user.ID)
 	result.SuccessData(userFiles)
 }
 
@@ -92,6 +92,7 @@ func (c *userConvertController) ConvertFile(ctx *gin.Context) {
 	//添加到dao
 	userFile.InFileName = head.Filename
 	userFile.InFilePath = infilePath
+	userFile.InFileSize = utils.FormatFileSize(head.Size)
 	userFile.OutFileName = strings.Split(head.Filename, ".")[0] + "." + outFormat
 	userFile.State = models.CONVERTING
 	dao.InsertUserFile(userFile)
@@ -103,6 +104,12 @@ func (c *userConvertController) ConvertFile(ctx *gin.Context) {
 			userFile.State = models.FALSE
 		} else {
 			userFile.OutFileName = outFilePath
+			//读取输出文件大小
+			osStat, statErr := os.Stat(outFilePath)
+			if statErr != nil {
+				log.Println(statErr)
+			}
+			userFile.OutFileSize = utils.FormatFileSize(osStat.Size())
 			userFile.State = models.SUCCESS
 		}
 		//通过ws发送信息给用户

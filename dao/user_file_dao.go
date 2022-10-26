@@ -6,14 +6,15 @@ import (
 )
 
 //
-// ListFileNamesByUserId
+// ListFileStatesByUserId
 //  @Description: 通过用户名称获取用户所有文件名称
 //  @param userId
 //  @return []*models.UserFile
 //
-func ListFileNamesByUserId(userID int) []*models.UserFile {
+func ListFileStatesByUserId(userID int) []*models.UserFile {
 	var userFiles []*models.UserFile
-	db.DB.Select("id", "in_file_name", "out_file_name").Where("user_id = ?", userID).Scan(&userFiles)
+	db.DB.Select("id", "in_file_name", "out_file_name", "in_file_size", "out_file_size").
+		Where("user_id = ?", userID).Scan(&userFiles)
 	if userFiles == nil {
 		userFiles = []*models.UserFile{}
 	}

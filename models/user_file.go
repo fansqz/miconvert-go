@@ -16,6 +16,8 @@ type UserFile struct {
 	OutFileName string    `gorm:"colum:out_file_name"`
 	InFilePath  string    `gorm:"colum:in_file_path"`
 	OutFilePath string    `gorm:"colum:out_file_path"`
+	InFileSize  string    `gorm:"colum:in_file_size"`
+	OutFileSize string    `gorm:"colum:out_file_size"`
 	State       int       `gorm:"colum:state"`
 	Date        time.Time `gorm:"colum:date;date"`
 }
