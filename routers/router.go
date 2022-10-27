@@ -42,10 +42,11 @@ func Run() {
 	userController := controllers.NewUserController()
 	r.POST("/user/register", userController.Register)
 	r.POST("/user/login", userController.Login)
-
+	//用户下载
+	userConvertController := controllers.NewUserConvertController()
+	r.GET("/userConvert/downloadFile/:fileId", userConvertController.DownloadFile)
 	//添加token拦截器
 	r.Use(interceptor.TokenAuthorize())
-
 	//修改密码
 	r.POST("/user/changePassword", userController.ChangePassword)
 	//ws
@@ -53,13 +54,11 @@ func Run() {
 		ws.ServeWs(ctx.Writer, ctx.Request)
 	})
 	//用户文件解析
-	userConvert := r.Group("userConvert")
+	userConvert := r.Group("/userConvert")
 	{
-		userConvertController := controllers.NewUserConvertController()
-		userConvert.GET("listFile", userConvertController.ListFile)
-		userConvert.DELETE("deleteFiles", userConvertController.DeleteFiles)
-		userConvert.POST("convertFile", userConvertController.ConvertFile)
-		userConvert.GET("downloadFile", userConvertController.DownloadFile)
+		userConvert.GET("/listFile", userConvertController.ListFile)
+		userConvert.DELETE("/deleteFiles", userConvertController.DeleteFiles)
+		userConvert.POST("/convertFile", userConvertController.ConvertFile)
 	}
 	err := r.Run()
 	if err != nil {
