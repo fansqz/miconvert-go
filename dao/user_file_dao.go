@@ -14,7 +14,7 @@ import (
 //
 func ListFileStatesByUserId(userID int) []*models.UserFile {
 	var userFiles []*models.UserFile
-	err := db.DB.Select("id, in_file_name, out_file_name,in_file_size, out_file_size").
+	err := db.DB.Select("id, in_file_name, out_file_name,in_file_size, out_file_size，state").
 		Where("user_id = ?", userID).Find(&userFiles).Error
 	if err != nil {
 		log.Println(err)
