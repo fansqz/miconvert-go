@@ -24,6 +24,8 @@ func Run() {
 	r := gin.Default()
 	//允许跨域
 	r.Use(interceptor.Cors())
+	//添加token拦截器
+	r.Use(interceptor.TokenAuthorize())
 	//设置静态文件位置
 	r.Static("/static", "/")
 	//ping
@@ -38,17 +40,14 @@ func Run() {
 		convert.GET("/listInFormatByOutFormat", convertController.ListInFormatByOutFormat)
 		convert.GET("/listAllOutFormat", convertController.ListAllOutFormat)
 	}
-	//用户注册,登录
-	userController := controllers.NewUserController()
-	r.POST("/user/register", userController.Register)
-	r.POST("/user/login", userController.Login)
-	//用户下载
-	userConvertController := controllers.NewUserConvertController()
-	r.GET("/userConvert/downloadFile/:fileId", userConvertController.DownloadFile)
-	//添加token拦截器
-	r.Use(interceptor.TokenAuthorize())
-	//修改密码
-	r.POST("/user/changePassword", userController.ChangePassword)
+	//用户相关
+	user := r.Group("/user")
+	{
+		userController := controllers.NewUserController()
+		user.POST("/register", userController.Register)
+		user.POST("/login", userController.Login)
+		user.POST("/user/changePassword", userController.ChangePassword)
+	}
 	//ws
 	r.GET("/ws/:token", func(ctx *gin.Context) {
 		ws.ServeWs(ctx.Writer, ctx.Request)
@@ -56,9 +55,11 @@ func Run() {
 	//用户文件解析
 	userConvert := r.Group("/userConvert")
 	{
+		userConvertController := controllers.NewUserConvertController()
 		userConvert.GET("/listFile", userConvertController.ListFile)
 		userConvert.DELETE("/deleteFiles", userConvertController.DeleteFiles)
 		userConvert.POST("/convertFile", userConvertController.ConvertFile)
+		userConvert.GET("/downloadFile/:fileId", userConvertController.DownloadFile)
 	}
 	err := r.Run()
 	if err != nil {

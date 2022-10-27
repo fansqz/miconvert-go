@@ -4,7 +4,10 @@
 // @Description: 初始化时读取配置文件相关工具
 package setting
 
-import "gopkg.in/ini.v1"
+import (
+	"gopkg.in/ini.v1"
+	"strings"
+)
 
 var Conf = new(AppConfig)
 
@@ -13,10 +16,12 @@ var Conf = new(AppConfig)
 // @Description:应用配置
 //
 type AppConfig struct {
-	Release        bool `ini:"release"` //是否是上线模式
-	Port           int  `ini:"port"`    //端口
-	*MySqlConfig   `ini:"mysql"`
-	*ConvertConfig `ini:"convert"`
+	Release          bool   `ini:"release"` //是否是上线模式
+	Port             int    `ini:"port"`    //端口
+	ReleaseStartPath string `ini:"releaseStartPath"`
+	*MySqlConfig
+	*ConvertConfig
+	*ReleasePathConfig
 }
 
 //
@@ -42,6 +47,10 @@ type ConvertConfig struct {
 	UserOutPath string `ini:"userOutPath"` //用户输出文件位置
 }
 
+type ReleasePathConfig struct {
+	StartWith []string
+}
+
 //
 // Init
 //  @Description: 初始化配置
@@ -49,5 +58,20 @@ type ConvertConfig struct {
 //  @return error
 //
 func Init(file string) error {
-	return ini.MapTo(Conf, file)
+	cfg, err := ini.Load(file)
+	if err != nil {
+		return err
+	}
+	mysqlConfig := &MySqlConfig{}
+	convertConfig := &ConvertConfig{}
+	cfg.MapTo(Conf)
+	cfg.Section("mysql").MapTo(mysqlConfig)
+	cfg.Section("convert").MapTo(convertConfig)
+	//遍历releasePath
+	startPaths := strings.Split(Conf.ReleaseStartPath, ",")
+	releasePathConfig := &ReleasePathConfig{StartWith: startPaths}
+	Conf.ReleasePathConfig = releasePathConfig
+	Conf.MySqlConfig = mysqlConfig
+	Conf.ConvertConfig = convertConfig
+	return nil
 }
