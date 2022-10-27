@@ -26,9 +26,9 @@ func ServeWs(w http.ResponseWriter, r *http.Request) {
 	array := strings.Split(r.URL.String(), ",")
 	token := array[len(array)-1]
 	user, _ := utils.ParseToken(token)
-	WSManager.wsMap[user.ID] = conn
+	WSManager.wsMap[user.Id] = conn
 
-	go listenClose(user.ID, conn)
+	go listenClose(user.Id, conn)
 }
 
 func listenClose(userid int, ws *websocket.Conn) {

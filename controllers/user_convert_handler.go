@@ -7,6 +7,7 @@ import (
 	"log"
 	"miconvert-go/dao"
 	"miconvert-go/models"
+	"miconvert-go/models/dto"
 	r "miconvert-go/models/result"
 	"miconvert-go/setting"
 	"miconvert-go/utils"
@@ -37,14 +38,26 @@ func NewUserConvertController() *userConvertController {
 
 func (c *userConvertController) ListFile(ctx *gin.Context) {
 	result := r.NewResult(ctx)
-	token := ctx.GetHeader("token")
-	user, err := utils.ParseToken(token)
-	if err != nil {
-		result.SimpleErrorMessage("系统错误")
-		return
+	user := ctx.Keys["user"].(*models.User)
+	userFiles := dao.ListFileStatesByUserId(user.Id)
+	fileDtos := make([]*dto.FileDto, len(userFiles))
+	//遍历并转换为fileDto
+	for i := 0; i < len(userFiles); i++ {
+		fileDto := &dto.FileDto{}
+		fileDto.Id = userFiles[i].Id
+		fileDto.UserId = userFiles[i].UserId
+		fileDto.State = userFiles[i].State
+		if userFiles[i].State == 2 {
+			//转换成功
+			fileDto.FileName = userFiles[i].OutFileName
+			fileDto.FileSize = userFiles[i].OutFileSize
+		} else {
+			fileDto.FileName = userFiles[i].InFileName
+			fileDto.FileSize = userFiles[i].InFileSize
+		}
+		fileDtos[i] = fileDto
 	}
-	userFiles := dao.ListFileStatesByUserId(user.ID)
-	result.SuccessData(userFiles)
+	result.SuccessData(fileDtos)
 }
 
 func (c *userConvertController) DeleteFiles(ctx *gin.Context) {
@@ -65,7 +78,7 @@ func (c *userConvertController) DeleteFiles(ctx *gin.Context) {
 	for _, userFile := range userFiles {
 		os.Remove(userFile.InFilePath)
 		os.Remove(userFile.OutFilePath)
-		dao.DeleteUserFile(userFile.ID)
+		dao.DeleteUserFile(userFile.Id)
 	}
 	result.SuccessMessage("删除成功!")
 }
@@ -75,7 +88,7 @@ func (c *userConvertController) ConvertFile(ctx *gin.Context) {
 	token := ctx.GetHeader("token")
 	user, _ := utils.ParseToken(token)
 	outFormat := ctx.PostForm("outFormat")
-	userFile := &models.UserFile{UserID: user.ID}
+	userFile := &models.UserFile{UserId: user.Id}
 	//保存文件到temp
 	file, head, err := ctx.Request.FormFile("file")
 	defer file.Close()
@@ -115,12 +128,12 @@ func (c *userConvertController) ConvertFile(ctx *gin.Context) {
 		//通过ws发送信息给用户
 		dao.UpdateUserFile(userFile)
 		//发送数据给前端
-		userFiles := dao.ListUserFileByUserId(user.ID)
+		userFiles := dao.ListUserFileByUserId(user.Id)
 		json, _ := json.Marshal(r.ResultCont{
 			Code: 200,
 			Data: userFiles,
 		})
-		ws.WSManager.SendMessage(user.ID, json)
+		ws.WSManager.SendMessage(user.Id, json)
 	}()
 	result.SuccessData("文件已添加")
 }

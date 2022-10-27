@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"log"
 	"miconvert-go/db"
 	"miconvert-go/models"
 )
@@ -13,8 +14,11 @@ import (
 //
 func ListFileStatesByUserId(userID int) []*models.UserFile {
 	var userFiles []*models.UserFile
-	db.DB.Select("id", "in_file_name", "out_file_name", "in_file_size", "out_file_size").
-		Where("user_id = ?", userID).Scan(&userFiles)
+	err := db.DB.Select("id, in_file_name, out_file_name,in_file_size, out_file_size").
+		Where("user_id = ?", userID).Find(&userFiles).Error
+	if err != nil {
+		log.Println(err)
+	}
 	if userFiles == nil {
 		userFiles = []*models.UserFile{}
 	}

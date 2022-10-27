@@ -44,6 +44,6 @@ func InsertUser(user *models.User) {
 func UpdateUser(user *models.User) error {
 	sqlStr := "update `users` set username = ?, password = ?, email = ? where id = ?"
 	//执行
-	db.DB.Exec(sqlStr, user.Username, user.Password, user.Email, user.ID)
+	db.DB.Exec(sqlStr, user.Username, user.Password, user.Email, user.Id)
 	return nil
 }

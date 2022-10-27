@@ -10,8 +10,8 @@ const (
 
 //User 结构体
 type UserFile struct {
-	ID          int       `gorm:"primary_key;AUTO_INCREMENT;column:id"`
-	UserID      int       `gorm:"colum:user_id"`
+	Id          int       `gorm:"primary_key;AUTO_INCREMENT;column:id"`
+	UserId      int       `gorm:"colum:user_id"`
 	InFileName  string    `gorm:"colum:in_file_name"`
 	OutFileName string    `gorm:"colum:out_file_name"`
 	InFilePath  string    `gorm:"colum:in_file_path"`

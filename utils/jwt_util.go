@@ -33,7 +33,7 @@ func GenerateToken(user *models.User) (string, error) {
 	nowTime := time.Now()
 	expiredTime := nowTime.Add(expiredTime)
 	claims := claims{
-		ID:       user.ID,
+		ID:       user.Id,
 		Username: user.Username,
 		Email:    user.Email,
 		StandardClaims: jwt.StandardClaims{
@@ -65,7 +65,7 @@ func ParseToken(token string) (*models.User, error) {
 	if tokenClaims != nil {
 		if claims, ok := tokenClaims.Claims.(*claims); ok && tokenClaims.Valid {
 			user := &models.User{}
-			user.ID = claims.ID
+			user.Id = claims.ID
 			user.Username = claims.Username
 			user.Email = claims.Email
 			return user, nil
