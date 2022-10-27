@@ -84,5 +84,8 @@ func DeleteUserFile(id int) {
 //  @param userFile
 //
 func UpdateUserFile(userFile *models.UserFile) {
-	db.DB.Model(&models.UserFile{}).Update(userFile)
+	err := db.DB.Model(&models.UserFile{}).Update(userFile).Error
+	if err != nil {
+		log.Println(err)
+	}
 }

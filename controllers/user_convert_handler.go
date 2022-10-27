@@ -107,7 +107,6 @@ func (c *userConvertController) ConvertFile(ctx *gin.Context) {
 	userFile.InFileName = head.Filename
 	userFile.InFilePath = infilePath
 	userFile.InFileSize = utils.FormatFileSize(head.Size)
-	userFile.OutFileName = strings.Split(head.Filename, ".")[0] + "." + outFormat
 	userFile.State = models.CONVERTING
 	userFile.Date = time.Now()
 	dao.InsertUserFile(userFile)
@@ -115,10 +114,12 @@ func (c *userConvertController) ConvertFile(ctx *gin.Context) {
 	go func() {
 		outFilePath, convertErr := utils.Convert(infilePath, setting.Conf.UserOutPath, outFormat)
 		if convertErr != nil {
-			userFile.OutFilePath = outFilePath
 			userFile.State = models.FALSE
 		} else {
-			userFile.OutFileName = outFilePath
+			userFile.OutFilePath = outFilePath
+			//读取文件名称
+			a := strings.Split(outFilePath, "/")
+			userFile.OutFileName = a[len(a)-1][strings.Index(a[len(a)-1], "_")+1:]
 			//读取输出文件大小
 			osStat, statErr := os.Stat(outFilePath)
 			if statErr != nil {
