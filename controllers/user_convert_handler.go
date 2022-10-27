@@ -15,6 +15,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type UserConvertController interface {
@@ -108,6 +109,7 @@ func (c *userConvertController) ConvertFile(ctx *gin.Context) {
 	userFile.InFileSize = utils.FormatFileSize(head.Size)
 	userFile.OutFileName = strings.Split(head.Filename, ".")[0] + "." + outFormat
 	userFile.State = models.CONVERTING
+	userFile.Date = time.Now()
 	dao.InsertUserFile(userFile)
 	//进行异步解析
 	go func() {

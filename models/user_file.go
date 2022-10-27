@@ -8,7 +8,7 @@ const (
 	FALSE      = 2 //转换失败
 )
 
-//User 结构体
+//UserFile 结构体
 type UserFile struct {
 	Id          int       `gorm:"primary_key;AUTO_INCREMENT;column:id"`
 	UserId      int       `gorm:"colum:user_id"`

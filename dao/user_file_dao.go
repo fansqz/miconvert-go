@@ -63,7 +63,10 @@ func ListUserFileByIds(ids []int) []*models.UserFile {
 //  @param userFile
 //
 func InsertUserFile(userFile *models.UserFile) {
-	db.DB.Create(userFile)
+	err := db.DB.Create(userFile).Error
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 //
