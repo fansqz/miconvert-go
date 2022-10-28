@@ -31,19 +31,21 @@ func ServeWs(w http.ResponseWriter, r *http.Request) {
 	go listenClose(user.Id, conn)
 }
 
+// 监听连接是否断开
 func listenClose(userid int, ws *websocket.Conn) {
-	ticker := time.NewTicker(pingPeriod)
 	defer func() {
-		ticker.Stop()
 		WSManager.DeleteConn(userid)
 	}()
+	ws.SetReadLimit(maxMessageSize)
+	ws.SetReadDeadline(time.Now().Add(pongWait))
+	ws.SetPongHandler(func(string) error { ws.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
-		select {
-		case <-ticker.C:
-			ws.SetWriteDeadline(time.Now().Add(writeWait))
-			if err := ws.WriteMessage(websocket.PingMessage, nil); err != nil {
-				return
+		_, _, err := ws.ReadMessage()
+		if err != nil {
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				log.Printf("error: %v", err)
 			}
+			break
 		}
 	}
 }
