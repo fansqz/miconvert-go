@@ -13,7 +13,7 @@ import (
 //  @return []*models.UserFile
 //
 func ListFileStatesByUserId(userID int) []*models.UserFile {
-	var userFiles []*models.UserFile
+	userFiles := []*models.UserFile{}
 	err := db.DB.Select("id, in_file_name, out_file_name,in_file_size, out_file_size, state").
 		Where("user_id = ?", userID).Find(&userFiles).Error
 	if err != nil {
@@ -32,17 +32,17 @@ func ListFileStatesByUserId(userID int) []*models.UserFile {
 //  @return []*models.UserFile
 //
 func ListUserFileByUserId(userID int) []*models.UserFile {
-	var userFiles []*models.UserFile
+	userFiles := []*models.UserFile{}
 	db.DB.Where("user_id = ?", userID).Scan(&userFiles)
-	if userFiles == nil {
-		userFiles = []*models.UserFile{}
-	}
 	return userFiles
 }
 
 func GetUserFileById(fileId int) *models.UserFile {
-	var userFile *models.UserFile
-	db.DB.First(userFile, fileId)
+	userFile := &models.UserFile{}
+	err := db.DB.First(userFile, fileId).Error
+	if err != nil {
+		log.Println(err)
+	}
 	return userFile
 }
 
@@ -52,7 +52,7 @@ func GetUserFileById(fileId int) *models.UserFile {
 //  @param ids
 //
 func ListUserFileByIds(ids []int) []*models.UserFile {
-	var userFiles []*models.UserFile
+	userFiles := []*models.UserFile{}
 	db.DB.Find(&userFiles, ids)
 	return userFiles
 }
