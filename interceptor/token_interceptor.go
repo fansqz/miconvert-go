@@ -33,6 +33,5 @@ func TokenAuthorize() gin.HandlerFunc {
 			return
 		}
 		c.Keys["user"] = user
-		c.Next()
 	}
 }

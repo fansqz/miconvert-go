@@ -75,7 +75,7 @@ func InsertUserFile(userFile *models.UserFile) {
 //  @param id
 //
 func DeleteUserFile(id int) {
-	db.DB.Delete(&models.UserFile{}, 10)
+	db.DB.Delete(&models.UserFile{}, id)
 }
 
 //
