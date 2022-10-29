@@ -9,7 +9,6 @@ import (
 	"miconvert-go/controllers"
 	"miconvert-go/interceptor"
 	"miconvert-go/setting"
-	"miconvert-go/ws"
 )
 
 //
@@ -49,9 +48,9 @@ func Run() {
 		user.POST("/user/changePassword", userController.ChangePassword)
 	}
 	//ws
-	r.GET("/ws/:token", func(ctx *gin.Context) {
-		ws.ServeWs(ctx.Writer, ctx.Request)
-	})
+	//r.GET("/ws/:token", func(ctx *gin.Context) {
+	//	ws.ServeWs(ctx.Writer, ctx.Request)
+	//})
 	//用户文件解析
 	userConvert := r.Group("/userConvert")
 	{

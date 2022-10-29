@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"io"
 	"log"
@@ -11,7 +10,6 @@ import (
 	r "miconvert-go/models/result"
 	"miconvert-go/setting"
 	"miconvert-go/utils"
-	"miconvert-go/ws"
 	"os"
 	"strconv"
 	"strings"
@@ -131,12 +129,12 @@ func (c *userConvertController) ConvertFile(ctx *gin.Context) {
 		//通过ws发送信息给用户
 		dao.UpdateUserFile(userFile)
 		//发送数据给前端
-		userFiles := dao.ListUserFileByUserId(user.Id)
-		json, _ := json.Marshal(r.ResultCont{
-			Code: 200,
-			Data: userFiles,
-		})
-		ws.WSManager.SendMessage(user.Id, json)
+		//userFiles := dao.ListUserFileByUserId(user.Id)
+		//json, _ := json.Marshal(r.ResultCont{
+		//	Code: 200,
+		//	Data: userFiles,
+		//})
+		//ws.WSManager.SendMessage(user.Id, json)
 	}()
 	result.SuccessData("文件已添加")
 }
