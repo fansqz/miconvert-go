@@ -45,7 +45,8 @@ func Run() {
 		userController := controllers.NewUserController()
 		user.POST("/register", userController.Register)
 		user.POST("/login", userController.Login)
-		user.POST("/user/changePassword", userController.ChangePassword)
+		user.POST("/changePassword", userController.ChangePassword)
+		user.GET("/getUserInfo", userController.GetUserInfo)
 	}
 	//ws
 	//r.GET("/ws/:token", func(ctx *gin.Context) {

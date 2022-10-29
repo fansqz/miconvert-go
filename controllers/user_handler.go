@@ -18,6 +18,8 @@ type UserController interface {
 	Login(ctx *gin.Context)
 	// Register 注册
 	Register(ctx *gin.Context)
+	// 根据token获取用户信息
+	GetUserInfo(ctx *gin.Context)
 	// ChangePassword 改密码
 	ChangePassword(ctx *gin.Context)
 }
@@ -138,4 +140,10 @@ func (u *userController) ChangePassword(ctx *gin.Context) {
 		return
 	}
 	result.SuccessData(token)
+}
+
+func (u *userController) GetUserInfo(ctx *gin.Context) {
+	result := r.NewResult(ctx)
+	user := ctx.Keys["user"].(*models.User)
+	result.SuccessData(user)
 }
