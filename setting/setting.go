@@ -22,6 +22,7 @@ type AppConfig struct {
 	*MySqlConfig
 	*ConvertConfig
 	*ReleasePathConfig
+	*EmailConfig
 }
 
 //
@@ -51,6 +52,13 @@ type ReleasePathConfig struct {
 	StartWith []string
 }
 
+type EmailConfig struct {
+	User     string `ini:"user"`
+	Password string `ini:"password"`
+	Host     string `ini:"host"`
+	Port     int    `ini:"port"`
+}
+
 //
 // Init
 //  @Description: 初始化配置
@@ -64,14 +72,17 @@ func Init(file string) error {
 	}
 	mysqlConfig := &MySqlConfig{}
 	convertConfig := &ConvertConfig{}
+	emailConfig := &EmailConfig{}
 	cfg.MapTo(Conf)
 	cfg.Section("mysql").MapTo(mysqlConfig)
 	cfg.Section("convert").MapTo(convertConfig)
+	cfg.Section("email").MapTo(emailConfig)
 	//遍历releasePath
 	startPaths := strings.Split(Conf.ReleaseStartPath, ",")
 	releasePathConfig := &ReleasePathConfig{StartWith: startPaths}
 	Conf.ReleasePathConfig = releasePathConfig
 	Conf.MySqlConfig = mysqlConfig
 	Conf.ConvertConfig = convertConfig
+	Conf.EmailConfig = emailConfig
 	return nil
 }
