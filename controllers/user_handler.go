@@ -58,10 +58,18 @@ func (u *userController) Register(ctx *gin.Context) {
 	user.Password = string(newPassword)
 	user.Email = email
 	user.Username = username
+	user.State = 0
+	user.Code = utils.GetUUID()[0:6]
 	//插入
 	dao.InsertUser(user)
+	//发送邮箱
+	err = u.sendActivateEmail(user.Email, user.Code)
 	//注册成功返回数据
-	result.SuccessMessage("注册成功")
+	if err != nil {
+		result.SuccessMessage("注册失败，未知错误")
+	} else {
+		result.SuccessMessage("注册成功")
+	}
 }
 
 func (u *userController) Login(ctx *gin.Context) {
@@ -95,6 +103,17 @@ func (u *userController) Login(ctx *gin.Context) {
 	}
 	result.SuccessData(token)
 
+}
+
+func (u *userController) Activate(ctx *gin.Context) {
+	result := r.NewResult(ctx)
+	code := ctx.Param("code")
+	err := dao.Activate(code)
+	if err != nil {
+		result.SimpleErrorMessage("激活失败")
+	} else {
+		result.SuccessMessage("激活成功")
+	}
 }
 
 func (u *userController) ChangePassword(ctx *gin.Context) {
@@ -146,4 +165,10 @@ func (u *userController) GetUserInfo(ctx *gin.Context) {
 	result := r.NewResult(ctx)
 	user := ctx.Keys["user"].(*models.User)
 	result.SuccessData(user)
+}
+
+func (u *userController) sendActivateEmail(email string, code string) error {
+	message := "这是一封激活邮箱，点击链接激活miconvnert账号，如果不是你本人注册，请忽视该本条邮件\n " +
+		"http://localhost:8080/user/activate/" + code
+	return utils.SendMail([]string{email}, "miconvert激活邮箱", message)
 }

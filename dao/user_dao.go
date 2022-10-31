@@ -5,7 +5,7 @@ import (
 	"miconvert-go/models"
 )
 
-//GetUserByName 根据用户名读取一条数据
+//GetUserByName 根据用户名读取一条数据，state为1
 func GetUserByName(username string) (*models.User, error) {
 	//写sql语句
 	sqlStr := "select id,username,password,email from users where username = ?"
@@ -38,6 +38,12 @@ func CheckEmailInDb(email string) bool {
 //InsertUser 向数据库中插入用户信息
 func InsertUser(user *models.User) {
 	db.DB.Create(user)
+}
+
+//激活用户
+func Activate(code string) error {
+	sqlStr := "update users set state = 1 where code = ?"
+	return db.DB.Exec(sqlStr, code).Error
 }
 
 //UpdateUser 更新用户

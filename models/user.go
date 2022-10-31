@@ -6,4 +6,6 @@ type User struct {
 	Username string `gorm:"colum:username" json:"username"`
 	Password string `gorm:"colum:password" json:"password"`
 	Email    string `gorm:"colum:email" json:"email"`
+	State    int    `gorm:"colum:state"`
+	Code     string `gorm:"colum:code"`
 }

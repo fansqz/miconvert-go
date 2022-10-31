@@ -47,6 +47,7 @@ func Run() {
 		user.POST("/login", userController.Login)
 		user.POST("/changePassword", userController.ChangePassword)
 		user.GET("/getUserInfo", userController.GetUserInfo)
+		user.GET("/activate", userController.Activate)
 	}
 	//ws
 	//r.GET("/ws/:token", func(ctx *gin.Context) {
