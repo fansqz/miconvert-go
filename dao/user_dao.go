@@ -5,10 +5,10 @@ import (
 	"miconvert-go/models"
 )
 
-//GetUserByName 根据用户名读取一条数据，state为1
+//GetUserByName
 func GetUserByName(username string) (*models.User, error) {
 	//写sql语句
-	sqlStr := "select id,username,password,email from users where username = ?"
+	sqlStr := "select id,username,password,email,state from users where username = ?"
 	//执行
 	row := db.DB.Raw(sqlStr, username)
 	user := &models.User{}

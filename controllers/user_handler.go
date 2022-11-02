@@ -66,9 +66,9 @@ func (u *userController) Register(ctx *gin.Context) {
 	err = u.sendActivateEmail(user.Email, user.Code)
 	//注册成功返回数据
 	if err != nil {
-		result.SuccessMessage("注册失败，未知错误")
+		result.SimpleErrorMessage("注册失败，未知错误")
 	} else {
-		result.SuccessMessage("注册成功")
+		result.SuccessMessage("注册成功，激活链接将发送至邮箱，请点击激活")
 	}
 }
 
@@ -86,6 +86,10 @@ func (u *userController) Login(ctx *gin.Context) {
 		return
 	}
 	user, userErr := dao.GetUserByName(username)
+	if user.State == models.INACTIVATED {
+		result.SimpleErrorMessage("用户未激活，请及时激活")
+		return
+	}
 	if userErr != nil {
 		result.SimpleErrorMessage("系统错误")
 		log.Println(userErr)
