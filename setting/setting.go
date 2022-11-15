@@ -17,7 +17,7 @@ var Conf = new(AppConfig)
 //
 type AppConfig struct {
 	Release          bool   `ini:"release"` //是否是上线模式
-	Port             int    `ini:"port"`    //端口
+	Port             string `ini:"port"`    //端口
 	ReleaseStartPath string `ini:"releaseStartPath"`
 	ProUrl           string `ini:"proUrl"`
 	*MySqlConfig
