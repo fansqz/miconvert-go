@@ -6,6 +6,7 @@ import (
 	"miconvert-go/dao"
 	"miconvert-go/models"
 	r "miconvert-go/models/result"
+	"miconvert-go/setting"
 	"miconvert-go/utils"
 )
 
@@ -173,6 +174,6 @@ func (u *userController) GetUserInfo(ctx *gin.Context) {
 
 func (u *userController) sendActivateEmail(email string, code string) error {
 	message := "这是一封激活邮箱，点击链接激活miconvnert账号，如果不是你本人注册，请忽视该本条邮件\n " +
-		"http://localhost:8080/user/activate/" + code
+		setting.Conf.ProUrl + "/user/activate/" + code
 	return utils.SendMail([]string{email}, "miconvert激活邮箱", message)
 }

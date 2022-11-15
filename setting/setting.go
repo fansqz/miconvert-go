@@ -19,6 +19,7 @@ type AppConfig struct {
 	Release          bool   `ini:"release"` //是否是上线模式
 	Port             int    `ini:"port"`    //端口
 	ReleaseStartPath string `ini:"releaseStartPath"`
+	ProUrl           string `ini:"proUrl"`
 	*MySqlConfig
 	*ConvertConfig
 	*ReleasePathConfig
@@ -57,6 +58,10 @@ type EmailConfig struct {
 	Password string `ini:"password"`
 	Host     string `ini:"host"`
 	Port     int    `ini:"port"`
+}
+
+type ProUrl struct {
+	ProUrl string `ini:"proUrl"`
 }
 
 //
