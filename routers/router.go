@@ -62,7 +62,7 @@ func Run() {
 		userConvert.POST("/convertFile", userConvertController.ConvertFile)
 		userConvert.GET("/downloadFile/:fileId", userConvertController.DownloadFile)
 	}
-	err := r.Run(setting.Conf.Port)
+	err := r.Run(":" + setting.Conf.Port)
 	if err != nil {
 		return
 	}
