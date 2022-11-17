@@ -10,7 +10,6 @@ import (
 	"miconvert-go/dao"
 	"os/exec"
 	"path"
-	"runtime"
 	"strings"
 )
 
@@ -29,14 +28,7 @@ const (
 //
 func SOfficeConvert(fileSrcPath string, fileOutDir string, toFormat string) (fileOutPath string, err error) {
 	//根据不同的系统，调用不同命令
-	osname := runtime.GOOS
-	command := ""
-	if osname == "windows" {
-		command = "soffice"
-	}
-	if osname == "linux" {
-		command = "libreoffice6.0"
-	}
+	command := "soffice"
 	cmd := exec.Command(command, "--invisible", "--convert-to",
 		toFormat, fileSrcPath, "--outdir", fileOutDir)
 	byteByStat, errByCmdStart := cmd.Output()
