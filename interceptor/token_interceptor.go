@@ -32,6 +32,9 @@ func TokenAuthorize() gin.HandlerFunc {
 				result2.IDENTITY_INVALID.GetMessage(), nil)
 			return
 		}
+		if c.Keys == nil {
+			c.Keys = make(map[string]any, 1)
+		}
 		c.Keys["user"] = user
 	}
 }
