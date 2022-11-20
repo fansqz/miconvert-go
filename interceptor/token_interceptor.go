@@ -33,7 +33,7 @@ func TokenAuthorize() gin.HandlerFunc {
 			return
 		}
 		if c.Keys == nil {
-			c.Keys = make(map[string]any, 1)
+			c.Keys = make(map[string]interface{}, 1)
 		}
 		c.Keys["user"] = user
 	}
