@@ -6,10 +6,14 @@ package utils
 
 import (
 	"fmt"
+	"github.com/gen2brain/go-fitz"
+	"image/jpeg"
 	"log"
 	"miconvert-go/dao"
+	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -66,6 +70,85 @@ func Pdf2docxConvert(fileSrcPath string, fileOutDir string) (fileOutPath string,
 	//返回数据
 	log.Println("文件转换成功", string(byteByState))
 	return fileOutPath, nil
+}
+
+//
+// GoFitzConvert
+//  @Description: 利用go-fitz进行转换
+// 支持pdf -> txt，pdf -> jpg, pdf -> html
+//  @param fileSrcPath
+//  @param fileOutDir
+//  @param toFormat
+//  @return fileOutPath
+//  @return err
+//
+func GoFitzConvert(fileSrcPath string, fileOutDir string, toFormat string) (fileOutPath string, e error) {
+	doc, err := fitz.New(fileSrcPath)
+	if err != nil {
+		panic(err)
+	}
+	defer doc.Close()
+	//获取输出文件名称
+	// Extract pages as images
+	for n := 0; n < doc.NumPage(); n++ {
+		img, err := doc.Image(n)
+		if err != nil {
+			panic(err)
+		}
+
+		f, err := os.Create(filepath.Join(fileOutDir, fmt.Sprintf("test%03d.jpg", n)))
+		if err != nil {
+			panic(err)
+		}
+
+		err = jpeg.Encode(f, img, &jpeg.Options{jpeg.DefaultQuality})
+		if err != nil {
+			panic(err)
+		}
+
+		f.Close()
+	}
+
+	// Extract pages as text
+	for n := 0; n < doc.NumPage(); n++ {
+		text, err := doc.Text(n)
+		if err != nil {
+			panic(err)
+		}
+
+		f, err := os.Create(filepath.Join(fileOutDir, fmt.Sprintf("test%03d.txt", n)))
+		if err != nil {
+			panic(err)
+		}
+
+		_, err = f.WriteString(text)
+		if err != nil {
+			panic(err)
+		}
+
+		f.Close()
+	}
+
+	// Extract pages as html
+	for n := 0; n < doc.NumPage(); n++ {
+		html, err := doc.HTML(n, true)
+		if err != nil {
+			panic(err)
+		}
+
+		f, err := os.Create(filepath.Join(fileOutDir, fmt.Sprintf("test%03d.html", n)))
+		if err != nil {
+			panic(err)
+		}
+
+		_, err = f.WriteString(html)
+		if err != nil {
+			panic(err)
+		}
+
+		f.Close()
+	}
+
 }
 
 //
